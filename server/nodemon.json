@@ -1,0 +1,21 @@
+{
+  "watch": [
+    "."
+  ],
+  "ext": "js,json",
+  "ignore": [
+    "node_modules/",
+    "*.log",
+    "*.txt",
+    ".git"
+  ],
+  "delay": 2000,
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "restartable": "rs",
+  "verbose": false,
+  "signal": "SIGTERM",
+  "colours": true,
+  "legacyWatch": false
+}

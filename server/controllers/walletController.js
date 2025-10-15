@@ -83,8 +83,13 @@ const getWallet = async (req, res) => {
 // Create new wallet
 const createWallet = async (req, res) => {
   try {
+    console.log('🔧 Starting wallet creation...');
+    console.log('Request body:', req.body);
+    console.log('User ID:', req.user._id);
+    
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      console.log('❌ Validation errors:', errors.array());
       return res.status(400).json({
         success: false,
         message: 'Validation failed',
@@ -128,12 +133,14 @@ const createWallet = async (req, res) => {
       };
     } else {
       // Generate new hot wallet
+      console.log('🔄 Generating new', cryptocurrency, 'wallet...');
       let generatedWallet;
       
       switch (cryptocurrency) {
         case 'BTC':
         case 'LTC':
         case 'BCH':
+          console.log('₿ Generating Bitcoin wallet...');
           generatedWallet = generateBitcoinWallet(network);
           break;
         case 'ETH':
@@ -141,24 +148,33 @@ const createWallet = async (req, res) => {
         case 'USDC':
         case 'LINK':
         case 'BNB':
+          console.log('Ξ Generating Ethereum wallet...');
           generatedWallet = generateEthereumWallet(network);
           break;
         default:
+          console.log('❌ Unsupported cryptocurrency:', cryptocurrency);
           return res.status(400).json({
             success: false,
             message: `Unsupported cryptocurrency: ${cryptocurrency}`
           });
       }
       
+      console.log('✅ Wallet generated. Address:', generatedWallet.address);
+      console.log('🔐 Encrypting private key...');
+      
+      const encryptedPrivateKey = encrypt(generatedWallet.privateKey);
+      console.log('✅ Private key encrypted');
+      
       walletData = {
         address: generatedWallet.address,
         publicKey: generatedWallet.publicKey,
-        encryptedPrivateKey: JSON.stringify(encrypt(generatedWallet.privateKey)),
+        encryptedPrivateKey: JSON.stringify(encryptedPrivateKey),
         walletType: 'hot',
         importedFrom: 'generated'
       };
     }
     
+    console.log('🏦 Creating wallet object...');
     const wallet = new Wallet({
       userId: req.user._id,
       name,
@@ -169,12 +185,17 @@ const createWallet = async (req, res) => {
       ...walletData
     });
     
+    console.log('💾 Saving wallet to database...');
     await wallet.save();
+    console.log('✅ Wallet saved successfully!');
+    
+    // Remove sensitive data from response
+    const responseWallet = wallet.toJSON();
     
     res.status(201).json({
       success: true,
       message: 'Wallet created successfully',
-      data: { wallet }
+      data: { wallet: responseWallet }
     });
     
   } catch (error) {

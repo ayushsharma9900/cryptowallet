@@ -12,6 +12,7 @@ const connectDB = require('./config/database');
 // Import routes
 const authRoutes = require('./routes/auth');
 const walletRoutes = require('./routes/wallets');
+const exchangeRoutes = require('./routes/exchanges');
 
 // Import middleware
 const { optionalAuth } = require('./middleware/auth');
@@ -29,6 +30,7 @@ const io = new Server(server, {
 });
 
 // Connect to MongoDB
+console.log('Connecting to MongoDB...');
 connectDB();
 
 // Trust proxy (for Heroku, AWS, etc.)
@@ -101,6 +103,7 @@ app.get('/health', (req, res) => {
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/wallets', walletRoutes);
+app.use('/api/exchanges', exchangeRoutes);
 
 // Socket.IO connection handling
 io.on('connection', (socket) => {
@@ -159,6 +162,22 @@ app.get('/api/docs', (req, res) => {
         'GET /api/wallets/:id/transactions': 'Get wallet transactions',
         'PATCH /api/wallets/:id/primary': 'Set primary wallet',
         'POST /api/wallets/validate-address': 'Validate crypto address'
+      },
+      exchanges: {
+        'GET /api/exchanges/available': 'Get available exchanges',
+        'GET /api/exchanges/connected': 'Get connected exchanges',
+        'POST /api/exchanges/connect': 'Connect to exchange',
+        'DELETE /api/exchanges/disconnect/:key': 'Disconnect exchange',
+        'POST /api/exchanges/test/:key': 'Test exchange connection',
+        'GET /api/exchanges/balances': 'Get all exchange balances',
+        'GET /api/exchanges/:key/balances': 'Get specific exchange balances',
+        'GET /api/exchanges/portfolio': 'Get portfolio overview',
+        'GET /api/exchanges/:key/ticker/:symbol': 'Get ticker data',
+        'GET /api/exchanges/:key/orderbook/:symbol': 'Get order book',
+        'POST /api/exchanges/:key/orders': 'Create order',
+        'GET /api/exchanges/:key/orders': 'Get orders',
+        'DELETE /api/exchanges/:key/orders/:id': 'Cancel order',
+        'GET /api/exchanges/:key/trades': 'Get trade history'
       }
     }
   });
@@ -201,7 +220,7 @@ app.use((error, req, res, next) => {
 });
 
 // Server configuration
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 server.listen(PORT, () => {
   console.log(`
@@ -224,6 +243,13 @@ process.on('SIGTERM', () => {
 
 process.on('unhandledRejection', (reason, promise) => {
   console.log('Unhandled Rejection at:', promise, 'reason:', reason);
+  server.close(() => {
+    process.exit(1);
+  });
+});
+
+process.on('uncaughtException', (err) => {
+  console.log('Uncaught Exception:', err);
   server.close(() => {
     process.exit(1);
   });
