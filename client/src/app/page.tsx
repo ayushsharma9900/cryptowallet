@@ -557,7 +557,7 @@ export default function Dashboard() {
     setSendError('');
   };
 
-  const handleBuyUsingExchange = async (e) => {
+  const handleBuyUsingExchange = async (e: React.FormEvent) => {
     e.preventDefault();
     if (exchanges.length === 0) {
       setBuyError('Please connect to an exchange first to buy cryptocurrency.');
@@ -635,12 +635,12 @@ export default function Dashboard() {
     setShowCredentialFields({});
   };
 
-  const handleExchangeConnection = (exchange) => {
+  const handleExchangeConnection = (exchange: any) => {
     setSelectedExchangeForConnection(exchange);
     resetConnectionForm();
   };
 
-  const connectToExchange = async (e) => {
+  const connectToExchange = async (e: React.FormEvent) => {
     e.preventDefault();
     setConnectionLoading(true);
     setConnectionError('');
@@ -682,14 +682,14 @@ export default function Dashboard() {
     }
   };
 
-  const toggleCredentialVisibility = (field) => {
+  const toggleCredentialVisibility = (field: string) => {
     setShowCredentialFields(prev => ({
       ...prev,
       [field]: !prev[field]
     }));
   };
 
-  const updateUserSetting = (path, value) => {
+  const updateUserSetting = (path: string, value: any) => {
     setUserSettings(prev => {
       const newSettings = { ...prev };
       const keys = path.split('.');
@@ -820,7 +820,7 @@ export default function Dashboard() {
     }
   };
 
-  const handlePasswordChange = async (e) => {
+  const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
     setPasswordLoading(true);
     setPasswordError('');
@@ -915,7 +915,7 @@ export default function Dashboard() {
     setShowProfileEdit(true);
   };
 
-  const handleProfileUpdate = async (e) => {
+  const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
     setProfileLoading(true);
     setProfileError('');
