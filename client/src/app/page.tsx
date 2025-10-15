@@ -176,8 +176,7 @@ export default function Dashboard() {
       } else {
         setError(data.message || 'Login failed');
       }
-    } catch (error) {
-      console.error('Login error:', error);
+    } catch (_) {
       setError('Network error. Please check your connection.');
     } finally {
       setLoading(false);
@@ -217,8 +216,7 @@ export default function Dashboard() {
           setError(data.message || 'Registration failed');
         }
       }
-    } catch (error) {
-      console.error('Registration error:', error);
+    } catch (_) {
       setError('Network error. Please check your connection.');
     } finally {
       setLoading(false);
@@ -243,8 +241,8 @@ export default function Dashboard() {
           sum + wallet.balanceUSD, 0);
         setTotalBalanceUSD(total);
       }
-    } catch (error) {
-      console.error('Failed to fetch wallets:', error);
+    } catch (_) {
+      console.error('Failed to fetch wallets');
     }
   };
 
@@ -261,8 +259,8 @@ export default function Dashboard() {
         const data = await response.json();
         setUser(data.data.user);
       }
-    } catch (error) {
-      console.error('Failed to fetch profile:', error);
+    } catch (_) {
+      console.error('Failed to fetch profile');
     }
   };
 
@@ -279,8 +277,8 @@ export default function Dashboard() {
         const data = await response.json();
         setExchanges(data.data.exchanges);
       }
-    } catch (error) {
-      console.error('Failed to fetch exchanges:', error);
+    } catch (_) {
+      console.error('Failed to fetch exchanges');
     }
   };
 
@@ -297,8 +295,8 @@ export default function Dashboard() {
         const data = await response.json();
         setAvailableExchanges(data.data.exchanges);
       }
-    } catch (error) {
-      console.error('Failed to fetch available exchanges:', error);
+    } catch (_) {
+      console.error('Failed to fetch available exchanges');
     }
   };
 
@@ -360,8 +358,7 @@ export default function Dashboard() {
           alert(`Failed to create ${cryptocurrency} wallet: ${data.message || 'Unknown error'}`);
         }
       }
-    } catch (error) {
-      console.error('Network error creating wallet:', error);
+    } catch (_) {
       alert(`Network error: Could not connect to server. Please check if the server is running.`);
     } finally {
       // Reset button states
@@ -543,8 +540,7 @@ export default function Dashboard() {
       
       // Close modal
       closeModal();
-    } catch (error) {
-      console.error('Send transaction error:', error);
+    } catch (_) {
       setSendError('Network error. Please check your connection and try again.');
     } finally {
       setSendLoading(false);
@@ -608,7 +604,7 @@ export default function Dashboard() {
       // Refresh wallets
       fetchWallets();
       closeModal();
-    } catch (error) {
+    } catch (_) {
       setBuyError('Failed to place buy order. Please try again.');
     } finally {
       setBuyLoading(false);
@@ -679,7 +675,7 @@ export default function Dashboard() {
       } else {
         setConnectionError(data.message || 'Failed to connect exchange');
       }
-    } catch (error) {
+    } catch (_) {
       setConnectionError('Network error. Please check your connection.');
     } finally {
       setConnectionLoading(false);
@@ -756,8 +752,8 @@ export default function Dashboard() {
         setUserSettings(completeSettings);
         setShowBalance(completeSettings.showBalances);
       }
-    } catch (error) {
-      console.error('Failed to load user settings:', error);
+    } catch (_) {
+      console.error('Failed to load user settings');
     }
   };
 
@@ -781,7 +777,7 @@ export default function Dashboard() {
       // });
       
       alert('✅ Settings saved successfully!');
-    } catch (error) {
+    } catch (_) {
       setSettingsError('Failed to save settings. Please try again.');
     } finally {
       setSettingsLoading(false);
@@ -879,7 +875,7 @@ export default function Dashboard() {
       });
       setShowPasswordChange(false);
       
-    } catch (error) {
+    } catch (_) {
       setPasswordError('Failed to change password. Please try again.');
     } finally {
       setPasswordLoading(false);
@@ -902,7 +898,7 @@ export default function Dashboard() {
       // Update user settings to reflect 2FA status
       updateUserSetting('security.twoFactorEnabled', true);
       
-    } catch (error) {
+    } catch (_) {
       alert('Failed to setup 2FA. Please try again.');
     }
   };
@@ -970,7 +966,7 @@ export default function Dashboard() {
       
       setShowProfileEdit(false);
       
-    } catch (error) {
+    } catch (_) {
       setProfileError('Failed to update profile. Please try again.');
     } finally {
       setProfileLoading(false);
@@ -2226,7 +2222,7 @@ export default function Dashboard() {
                 </div>
 
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                  <h4 className="font-medium text-blue-900 mb-2">✨ What you'll get:</h4>
+                  <h4 className="font-medium text-blue-900 mb-2">✨ What you&apos;ll get:</h4>
                   <ul className="text-sm text-blue-800 space-y-1">
                     <li>• Google Authenticator integration</li>
                     <li>• SMS backup verification</li>
@@ -2238,7 +2234,7 @@ export default function Dashboard() {
 
                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                   <h4 className="font-medium text-yellow-900 mb-2">⚠️ Important:</h4>
-                  <p className="text-sm text-yellow-800">Make sure to save your backup codes in a secure location. You'll need them if you lose access to your authenticator device.</p>
+                  <p className="text-sm text-yellow-800">Make sure to save your backup codes in a secure location. You&apos;ll need them if you lose access to your authenticator device.</p>
                 </div>
 
                 <div className="pt-4 border-t">
@@ -2661,7 +2657,7 @@ export default function Dashboard() {
                             <li>1. Visit {selectedExchangeForConnection.displayName} API settings</li>
                             <li>2. Create new API key with trading permissions</li>
                             <li>3. Copy the credentials and paste them above</li>
-                            <li>4. We'll test the connection before saving</li>
+                            <li>4. We&apos;ll test the connection before saving</li>
                           </ol>
                         </div>
 
