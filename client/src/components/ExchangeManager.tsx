@@ -60,7 +60,7 @@ export default function ExchangeManager() {
   const fetchAvailableExchanges = async () => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch('http://localhost:5001/api/exchanges/available', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api/exchanges/available`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -78,7 +78,7 @@ export default function ExchangeManager() {
   const fetchConnectedExchanges = async () => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch('http://localhost:5001/api/exchanges/connected', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api/exchanges/connected`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -96,7 +96,7 @@ export default function ExchangeManager() {
   const fetchBalances = async () => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch('http://localhost:5001/api/exchanges/balances', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api/exchanges/balances`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -119,7 +119,7 @@ export default function ExchangeManager() {
     
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch('http://localhost:5001/api/exchanges/connect', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api/exchanges/connect`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -157,7 +157,7 @@ export default function ExchangeManager() {
     
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch(`http://localhost:5001/api/exchanges/disconnect/${exchangeKey}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api/exchanges/disconnect/${exchangeKey}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -177,7 +177,7 @@ export default function ExchangeManager() {
   const testConnection = async (exchangeKey: string) => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch(`http://localhost:5001/api/exchanges/test/${exchangeKey}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api/exchanges/test/${exchangeKey}`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`

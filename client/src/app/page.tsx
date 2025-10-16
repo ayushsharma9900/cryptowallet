@@ -283,7 +283,7 @@ export default function Dashboard() {
   const fetchExchanges = async () => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch('http://localhost:5001/api/exchanges/connected', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api/exchanges/connected`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -301,7 +301,7 @@ export default function Dashboard() {
   const fetchAvailableExchanges = async () => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch('http://localhost:5001/api/exchanges/available', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api/exchanges/available`, {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -335,7 +335,7 @@ export default function Dashboard() {
       
       console.log('Creating wallet for:', cryptocurrency);
       
-      const response = await fetch('http://localhost:5001/api/wallets', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api/wallets`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -663,7 +663,7 @@ export default function Dashboard() {
 
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch('http://localhost:5001/api/exchanges/connect', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL || ''}/api/exchanges/connect`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

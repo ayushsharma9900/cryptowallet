@@ -7,7 +7,7 @@
     "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
     "server:dev": "cd server && nodemon index.js",
     "client:dev": "cd client && npm run dev",
-    "build": "cd client && npm run build",
+    "build": "cd client && npm install && npm run build",
     "build:vercel": "cd client && npm install && npm run build",
     "start": "cd server && npm start",
     "start:vercel": "node api/index.js",

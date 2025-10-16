@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "installCommand": "npm run install:all",
+  "builds": [
+    { "src": "client/next.config.ts", "use": "@vercel/next" },
+    { "src": "api/index.js", "use": "@vercel/node" }
+  ],
+  "routes": [
+    { "src": "^/api/(.*)$", "dest": "/api/index.js" }
+  ],
+  "functions": {
+    "api/index.js": {
+      "includeFiles": "server/**"
+    }
+  }
+}
