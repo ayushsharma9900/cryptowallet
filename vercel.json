@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "name": "cryptowallet-app-2024",
   "buildCommand": "cd client && npm run build",
   "outputDirectory": "client/.next",
   "installCommand": "npm install && cd client && npm install && cd ../server && npm install",
