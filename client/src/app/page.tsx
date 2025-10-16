@@ -172,7 +172,7 @@ export default function Dashboard() {
     setError('');
     
     try {
-      const response = await fetch('http://localhost:5001/api/auth/login', {
+      const response = await fetch('/api/auth/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -205,7 +205,7 @@ export default function Dashboard() {
     setError('');
     
     try {
-      const response = await fetch('http://localhost:5001/api/auth/register', {
+      const response = await fetch('/api/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -242,7 +242,7 @@ export default function Dashboard() {
   const fetchWallets = async () => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch('http://localhost:5001/api/wallets', {
+      const response = await fetch('/api/wallets', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -265,7 +265,7 @@ export default function Dashboard() {
   const fetchProfile = async () => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await fetch('http://localhost:5001/api/auth/profile', {
+      const response = await fetch('/api/auth/profile', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
