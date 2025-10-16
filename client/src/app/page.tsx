@@ -34,6 +34,14 @@ interface Exchange {
   requiredCredentials: string[];
 }
 
+interface ConnectedExchange {
+  name: string;
+  displayName: string;
+  key: string;
+  status: string;
+  label?: string;
+}
+
 export default function Dashboard() {
   const [wallets, setWallets] = useState<WalletData[]>([]);
   const [totalBalanceUSD, setTotalBalanceUSD] = useState(0);
@@ -65,10 +73,10 @@ export default function Dashboard() {
   });
   const [buyLoading, setBuyLoading] = useState(false);
   const [buyError, setBuyError] = useState('');
-  const [exchanges, setExchanges] = useState([]);
+  const [exchanges, setExchanges] = useState<ConnectedExchange[]>([]);
   const [showExchangeManager, setShowExchangeManager] = useState(false);
-  const [availableExchanges, setAvailableExchanges] = useState([]);
-  const [selectedExchangeForConnection, setSelectedExchangeForConnection] = useState(null);
+  const [availableExchanges, setAvailableExchanges] = useState<Exchange[]>([]);
+  const [selectedExchangeForConnection, setSelectedExchangeForConnection] = useState<Exchange | null>(null);
   const [connectionCredentials, setConnectionCredentials] = useState({
     apiKey: '',
     secretKey: '',
@@ -78,7 +86,7 @@ export default function Dashboard() {
   });
   const [connectionLoading, setConnectionLoading] = useState(false);
   const [connectionError, setConnectionError] = useState('');
-  const [showCredentialFields, setShowCredentialFields] = useState({});
+  const [showCredentialFields, setShowCredentialFields] = useState<{[key: string]: boolean}>({});
   const [userSettings, setUserSettings] = useState({
     showBalances: true,
     defaultCurrency: 'USD',
@@ -577,10 +585,10 @@ export default function Dashboard() {
 
     try {
       // For demo purposes, simulate a buy order
-      const selectedExchange = exchanges[0]; // Use first connected exchange
+      const selectedExchange = exchanges[0] || { name: 'Mock Exchange', displayName: 'Mock Exchange' }; // Use first connected exchange
       
       // Calculate estimated crypto amount (mock exchange rate)
-      const mockPrices = {
+      const mockPrices: { [key: string]: number } = {
         'BTC': 43000,
         'ETH': 2600,
         'USDT': 1,
@@ -600,7 +608,7 @@ export default function Dashboard() {
       // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      alert(`🎉 Buy Order Placed Successfully!\n\n💰 Amount: ${cryptoAmount} ${buyForm.cryptocurrency}\n💵 Cost: $${buyForm.amount} USD\n🏦 Exchange: ${selectedExchange.name}\n💳 Payment: ${buyForm.paymentMethod}\n\n⏳ Your order is being processed and will appear in your wallet shortly.`);
+      alert(`🎉 Buy Order Placed Successfully!\n\n💰 Amount: ${cryptoAmount} ${buyForm.cryptocurrency}\n💵 Cost: $${buyForm.amount} USD\n🏦 Exchange: ${selectedExchange.name || selectedExchange.displayName || 'Exchange'}\n💳 Payment: ${buyForm.paymentMethod}\n\n⏳ Your order is being processed and will appear in your wallet shortly.`);
       
       // Reset form
       setBuyForm({
@@ -662,7 +670,7 @@ export default function Dashboard() {
           'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
-          exchangeName: selectedExchangeForConnection.name,
+          exchangeName: selectedExchangeForConnection?.name || '',
           credentials: {
             apiKey: connectionCredentials.apiKey,
             secretKey: connectionCredentials.secretKey,
@@ -676,7 +684,7 @@ export default function Dashboard() {
       const data = await response.json();
 
       if (response.ok) {
-        alert(`✅ ${selectedExchangeForConnection.displayName} Connected Successfully!\n\nYou can now:\n• Buy crypto directly\n• View real-time balances\n• Execute trades\n\nConnection will appear in your exchange list.`);
+        alert(`✅ ${selectedExchangeForConnection?.displayName || 'Exchange'} Connected Successfully!\n\nYou can now:\n• Buy crypto directly\n• View real-time balances\n• Execute trades\n\nConnection will appear in your exchange list.`);
         setSelectedExchangeForConnection(null);
         resetConnectionForm();
         fetchExchanges(); // Refresh connected exchanges
@@ -701,7 +709,8 @@ export default function Dashboard() {
     setUserSettings(prev => {
       const newSettings = { ...prev };
       const keys = path.split('.');
-      let current = newSettings;
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let current: Record<string, any> = newSettings as Record<string, any>;
       
       for (let i = 0; i < keys.length - 1; i++) {
         current = current[keys[i]];
@@ -711,7 +720,7 @@ export default function Dashboard() {
       
       // Update showBalance state for immediate UI update
       if (path === 'showBalances') {
-        setShowBalance(value);
+        setShowBalance(value as boolean);
       }
       
       // Save settings to localStorage (in production, would save to backend)
@@ -963,12 +972,14 @@ export default function Dashboard() {
       // });
       
       // Update local user state
-      setUser(prev => ({
-        ...prev,
-        firstName: profileForm.firstName,
-        lastName: profileForm.lastName,
-        email: profileForm.email
-      }));
+      if (user) {
+        setUser({
+          ...user,
+          firstName: profileForm.firstName,
+          lastName: profileForm.lastName,
+          email: profileForm.email
+        });
+      }
       
       alert('👤 Profile Updated Successfully!\n\nYour profile information has been updated.');
       
@@ -1627,11 +1638,11 @@ export default function Dashboard() {
                           </div>
                           <div className="flex justify-between">
                             <span>Exchange Fee (~1%):</span>
-                            <span>${(parseFloat(buyForm.amount || 0) * 0.01).toFixed(2)} USD</span>
+                            <span>${(parseFloat(buyForm.amount || '0') * 0.01).toFixed(2)} USD</span>
                           </div>
                           <div className="flex justify-between font-medium">
                             <span>Total Cost:</span>
-                            <span>${(parseFloat(buyForm.amount || 0) * 1.01).toFixed(2)} USD</span>
+                            <span>${(parseFloat(buyForm.amount || '0') * 1.01).toFixed(2)} USD</span>
                           </div>
                         </div>
                       </div>
@@ -1788,13 +1799,18 @@ export default function Dashboard() {
                                 <p className="text-sm text-gray-500">{item.desc}</p>
                               </div>
                               <button 
-                                onClick={() => updateUserSetting(`notifications.${item.key}`, !userSettings.notifications[item.key])}
+                                onClick={() => updateUserSetting(`notifications.${item.key}`, 
+                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                  !(userSettings.notifications as any)[item.key]
+                                )}
                                 className={`relative w-12 h-6 rounded-full transition-colors ${
-                                  userSettings.notifications[item.key] ? 'bg-orange-600' : 'bg-gray-300'
+                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                  (userSettings.notifications as any)[item.key] ? 'bg-orange-600' : 'bg-gray-300'
                                 }`}
                               >
                                 <div className={`absolute top-0.5 w-5 h-5 bg-white rounded-full transition-transform ${
-                                  userSettings.notifications[item.key] ? 'translate-x-6' : 'translate-x-0.5'
+                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                  (userSettings.notifications as any)[item.key] ? 'translate-x-6' : 'translate-x-0.5'
                                 }`} />
                               </button>
                             </div>
@@ -1815,13 +1831,18 @@ export default function Dashboard() {
                                 <p className="text-sm text-gray-500">{item.desc}</p>
                               </div>
                               <button 
-                                onClick={() => updateUserSetting(`notifications.${item.key}`, !userSettings.notifications[item.key])}
+                                onClick={() => updateUserSetting(`notifications.${item.key}`, 
+                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                  !(userSettings.notifications as any)[item.key]
+                                )}
                                 className={`relative w-12 h-6 rounded-full transition-colors ${
-                                  userSettings.notifications[item.key] ? 'bg-orange-600' : 'bg-gray-300'
+                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                  (userSettings.notifications as any)[item.key] ? 'bg-orange-600' : 'bg-gray-300'
                                 }`}
                               >
                                 <div className={`absolute top-0.5 w-5 h-5 bg-white rounded-full transition-transform ${
-                                  userSettings.notifications[item.key] ? 'translate-x-6' : 'translate-x-0.5'
+                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                  (userSettings.notifications as any)[item.key] ? 'translate-x-6' : 'translate-x-0.5'
                                 }`} />
                               </button>
                             </div>
@@ -1926,13 +1947,18 @@ export default function Dashboard() {
                                 <p className="text-sm text-gray-500">{item.desc}</p>
                               </div>
                               <button 
-                                onClick={() => updateUserSetting(`privacy.${item.key}`, !userSettings.privacy[item.key])}
+                                onClick={() => updateUserSetting(`privacy.${item.key}`, 
+                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                  !(userSettings.privacy as any)[item.key]
+                                )}
                                 className={`relative w-12 h-6 rounded-full transition-colors ${
-                                  userSettings.privacy[item.key] ? 'bg-orange-600' : 'bg-gray-300'
+                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                  (userSettings.privacy as any)[item.key] ? 'bg-orange-600' : 'bg-gray-300'
                                 }`}
                               >
                                 <div className={`absolute top-0.5 w-5 h-5 bg-white rounded-full transition-transform ${
-                                  userSettings.privacy[item.key] ? 'translate-x-6' : 'translate-x-0.5'
+                                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                  (userSettings.privacy as any)[item.key] ? 'translate-x-6' : 'translate-x-0.5'
                                 }`} />
                               </button>
                             </div>

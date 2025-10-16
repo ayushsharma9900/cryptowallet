@@ -42,10 +42,8 @@ const nextConfig: NextConfig = {
     ];
   },
   
-  // Experimental features
-  experimental: {
-    serverComponentsExternalPackages: ['mongoose']
-  },
+  // Server external packages
+  serverExternalPackages: ['mongoose'],
   
   // Image domains if needed
   images: {

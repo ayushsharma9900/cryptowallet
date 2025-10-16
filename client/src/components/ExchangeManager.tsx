@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Trash2, TestTube, Activity, Eye, EyeOff } from 'lucide-react';
+import { Plus, Trash2, TestTube, Eye, EyeOff } from 'lucide-react';
 
 interface Exchange {
   name: string;
@@ -145,7 +145,7 @@ export default function ExchangeManager() {
       } else {
         setError(data.message || 'Failed to connect exchange');
       }
-    } catch (err) {
+    } catch {
       setError('Network error occurred');
     } finally {
       setLoading(false);
@@ -186,7 +186,7 @@ export default function ExchangeManager() {
       
       const data = await response.json();
       alert(data.message);
-    } catch (err) {
+    } catch {
       alert('Failed to test connection');
     }
   };
