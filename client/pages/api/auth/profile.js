@@ -43,7 +43,7 @@ export default async function handler(req, res) {
         }
 
         // Return user without password
-        const { password, ...userProfile } = user;
+        const { password: _password, ...userProfile } = user;
 
         res.status(200).json({
           success: true,
@@ -96,7 +96,7 @@ export default async function handler(req, res) {
         }
 
         // Return updated user without password
-        const { password, ...userProfile } = updatedUser;
+        const { password: _password2, ...userProfile } = updatedUser;
 
         res.status(200).json({
           success: true,

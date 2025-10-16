@@ -51,7 +51,7 @@ export default async function handler(req, res) {
     });
 
     // Return success (don't send password back)
-    const { password: _, ...userWithoutPassword } = newUser;
+    const { password: _password, ...userWithoutPassword } = newUser;
 
     res.status(201).json({
       success: true,
