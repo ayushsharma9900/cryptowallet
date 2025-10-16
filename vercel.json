@@ -5,18 +5,18 @@
   "outputDirectory": "client/.next",
   "installCommand": "npm install && cd client && npm install && cd ../server && npm install",
   "functions": {
-    "server/index.js": {
-      "runtime": "nodejs18.x"
+    "api/index.js": {
+      "runtime": "@vercel/node@3.0.0"
     }
   },
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "/server/index.js"
+      "destination": "/api/index.js"
     },
     {
       "source": "/health",
-      "destination": "/server/index.js"
+      "destination": "/api/index.js"
     }
   ],
   "env": {
