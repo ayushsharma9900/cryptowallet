@@ -13,7 +13,7 @@ Your crypto wallet project is now ready for direct deployment to Vercel!
 - [x] **ESLint Configuration**: Rules updated for API route compatibility
 - [x] **Build Process**: Successfully builds without errors
 
-## 🚀 Deployment Steps
+## 🚀 Deployment Steps (Updated - Working Solution)
 
 ### 1. Install Vercel CLI (if not already installed)
 ```bash
@@ -25,15 +25,16 @@ npm install -g vercel
 vercel login
 ```
 
-### 3. Deploy to Vercel
+### 3. Deploy the Frontend (Client)
 ```bash
+cd client
 vercel --prod
 ```
 
-Or use the deployment script:
-```bash
-npm run vercel:deploy
-```
+### 4. Your App is Now Live!
+✅ **Frontend**: https://cryptowallet-client-b7kf99m4p-ayushsharma9900s-projects.vercel.app
+
+The frontend includes a basic API endpoint that confirms the deployment is working.
 
 ## 🔧 Environment Variables Setup
 
