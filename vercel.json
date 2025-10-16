@@ -6,7 +6,7 @@
   "installCommand": "npm install && cd client && npm install && cd ../server && npm install",
   "functions": {
     "server/index.js": {
-      "runtime": "@vercel/node"
+      "runtime": "nodejs18.x"
     }
   },
   "rewrites": [
