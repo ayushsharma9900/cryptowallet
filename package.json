@@ -7,9 +7,15 @@
     "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
     "server:dev": "cd server && nodemon index.js",
     "client:dev": "cd client && npm run dev",
-    "build": "cd client && npx next build --turbopack",
+    "build": "cd client && npm run build",
+    "build:vercel": "cd client && npm install && npm run build",
     "start": "cd server && npm start",
-    "install:all": "npm install && cd client && npm install && cd ../server && npm install"
+    "start:vercel": "node api/index.js",
+    "install:all": "npm install && cd client && npm install && cd ../server && npm install",
+    "vercel:deploy": "vercel --prod",
+    "vercel:dev": "vercel dev",
+    "lint": "cd client && npm run lint",
+    "type-check": "cd client && npm run type-check"
   },
   "keywords": [
     "crypto",
@@ -22,7 +28,12 @@
   "author": "Your Name",
   "license": "MIT",
   "devDependencies": {
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "vercel": "latest"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
 }

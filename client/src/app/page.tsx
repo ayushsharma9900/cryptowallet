@@ -26,6 +26,14 @@ interface User {
   lastName: string;
 }
 
+interface Exchange {
+  name: string;
+  displayName: string;
+  description: string;
+  supportedFeatures: string[];
+  requiredCredentials: string[];
+}
+
 export default function Dashboard() {
   const [wallets, setWallets] = useState<WalletData[]>([]);
   const [totalBalanceUSD, setTotalBalanceUSD] = useState(0);
@@ -176,7 +184,7 @@ export default function Dashboard() {
       } else {
         setError(data.message || 'Login failed');
       }
-    } catch (_) {
+    } catch {
       setError('Network error. Please check your connection.');
     } finally {
       setLoading(false);
@@ -216,7 +224,7 @@ export default function Dashboard() {
           setError(data.message || 'Registration failed');
         }
       }
-    } catch (_) {
+    } catch {
       setError('Network error. Please check your connection.');
     } finally {
       setLoading(false);
@@ -241,7 +249,7 @@ export default function Dashboard() {
           sum + wallet.balanceUSD, 0);
         setTotalBalanceUSD(total);
       }
-    } catch (_) {
+    } catch {
       console.error('Failed to fetch wallets');
     }
   };
@@ -259,7 +267,7 @@ export default function Dashboard() {
         const data = await response.json();
         setUser(data.data.user);
       }
-    } catch (_) {
+    } catch {
       console.error('Failed to fetch profile');
     }
   };
@@ -277,7 +285,7 @@ export default function Dashboard() {
         const data = await response.json();
         setExchanges(data.data.exchanges);
       }
-    } catch (_) {
+    } catch {
       console.error('Failed to fetch exchanges');
     }
   };
@@ -295,7 +303,7 @@ export default function Dashboard() {
         const data = await response.json();
         setAvailableExchanges(data.data.exchanges);
       }
-    } catch (_) {
+    } catch {
       console.error('Failed to fetch available exchanges');
     }
   };
@@ -358,7 +366,7 @@ export default function Dashboard() {
           alert(`Failed to create ${cryptocurrency} wallet: ${data.message || 'Unknown error'}`);
         }
       }
-    } catch (_) {
+    } catch {
       alert(`Network error: Could not connect to server. Please check if the server is running.`);
     } finally {
       // Reset button states
@@ -540,7 +548,7 @@ export default function Dashboard() {
       
       // Close modal
       closeModal();
-    } catch (_) {
+    } catch {
       setSendError('Network error. Please check your connection and try again.');
     } finally {
       setSendLoading(false);
@@ -604,7 +612,7 @@ export default function Dashboard() {
       // Refresh wallets
       fetchWallets();
       closeModal();
-    } catch (_) {
+    } catch {
       setBuyError('Failed to place buy order. Please try again.');
     } finally {
       setBuyLoading(false);
@@ -635,7 +643,7 @@ export default function Dashboard() {
     setShowCredentialFields({});
   };
 
-  const handleExchangeConnection = (exchange: any) => {
+  const handleExchangeConnection = (exchange: Exchange) => {
     setSelectedExchangeForConnection(exchange);
     resetConnectionForm();
   };
@@ -675,7 +683,7 @@ export default function Dashboard() {
       } else {
         setConnectionError(data.message || 'Failed to connect exchange');
       }
-    } catch (_) {
+    } catch {
       setConnectionError('Network error. Please check your connection.');
     } finally {
       setConnectionLoading(false);
@@ -689,7 +697,7 @@ export default function Dashboard() {
     }));
   };
 
-  const updateUserSetting = (path: string, value: any) => {
+  const updateUserSetting = (path: string, value: boolean | string | number) => {
     setUserSettings(prev => {
       const newSettings = { ...prev };
       const keys = path.split('.');
@@ -752,7 +760,7 @@ export default function Dashboard() {
         setUserSettings(completeSettings);
         setShowBalance(completeSettings.showBalances);
       }
-    } catch (_) {
+    } catch {
       console.error('Failed to load user settings');
     }
   };
@@ -777,7 +785,7 @@ export default function Dashboard() {
       // });
       
       alert('✅ Settings saved successfully!');
-    } catch (_) {
+    } catch {
       setSettingsError('Failed to save settings. Please try again.');
     } finally {
       setSettingsLoading(false);
@@ -875,7 +883,7 @@ export default function Dashboard() {
       });
       setShowPasswordChange(false);
       
-    } catch (_) {
+    } catch {
       setPasswordError('Failed to change password. Please try again.');
     } finally {
       setPasswordLoading(false);
@@ -898,7 +906,7 @@ export default function Dashboard() {
       // Update user settings to reflect 2FA status
       updateUserSetting('security.twoFactorEnabled', true);
       
-    } catch (_) {
+    } catch {
       alert('Failed to setup 2FA. Please try again.');
     }
   };
@@ -966,7 +974,7 @@ export default function Dashboard() {
       
       setShowProfileEdit(false);
       
-    } catch (_) {
+    } catch {
       setProfileError('Failed to update profile. Please try again.');
     } finally {
       setProfileLoading(false);

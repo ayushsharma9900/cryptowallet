@@ -182,6 +182,32 @@ cd ../server
 npm start
 ```
 
+## 🚀 Deploy to Vercel
+
+For production deployment to Vercel:
+
+1. **Quick Deploy**
+   ```bash
+   # Install Vercel CLI
+   npm install -g vercel
+   
+   # Deploy to production
+   vercel --prod
+   ```
+
+2. **Set Environment Variables**
+   - Copy variables from `.env.vercel.example`
+   - Add them in Vercel Dashboard → Settings → Environment Variables
+   - Required: `MONGODB_URI`, `JWT_SECRET`, `ENCRYPTION_KEY`
+
+3. **MongoDB Atlas Setup**
+   - Create MongoDB Atlas account
+   - Create cluster and database user
+   - Whitelist IP addresses (0.0.0.0/0 for all)
+   - Use connection string in `MONGODB_URI`
+
+📖 **Detailed deployment guide**: See [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md)
+
 ## 📱 Usage
 
 ### Access the Application

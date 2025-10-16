@@ -1,0 +1,30 @@
+{
+  "version": 2,
+  "buildCommand": "cd client && npm run build",
+  "outputDirectory": "client/.next",
+  "installCommand": "npm install && cd client && npm install && cd ../server && npm install",
+  "functions": {
+    "server/index.js": {
+      "runtime": "@vercel/node"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/server/index.js"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/health",
+      "dest": "/server/index.js"
+    },
+    {
+      "src": "/api/(.*)",
+      "dest": "/server/index.js"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production"
+  }
+}
