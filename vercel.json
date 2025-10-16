@@ -1,1 +1,23 @@
-{}
+{
+  "version": 2,
+  "buildCommand": "npm run build",
+  "outputDirectory": "client/.next",
+  "installCommand": "npm run install:all",
+  "framework": "nextjs",
+  "functions": {
+    "api/index.js": {
+      "runtime": "nodejs20.x",
+      "maxDuration": 30
+    },
+    "client/pages/api/**/*.js": {
+      "runtime": "nodejs20.x",
+      "maxDuration": 30
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "/api/index.js"
+    }
+  ]
+}
