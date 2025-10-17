@@ -1,8 +1,11 @@
 {
   "version": 2,
   "public": true,
+  "buildCommand": "npm run build:vercel",
+  "installCommand": "npm run install:all",
+  "outputDirectory": "client/.next",
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api/index.js" },
-    { "source": "/(.*)", "destination": "/client/$1" }
+    { "source": "/(.*)", "destination": "/" }
   ]
 }
