@@ -1,6 +1,6 @@
 // API Configuration
 export const API_CONFIG = {
-  BASE_URL: process.env.NEXT_PUBLIC_API_URL || '',
+  BASE_URL: process.env.NEXT_PUBLIC_API_URL || 'https://cryptowallet-rho.vercel.app',
   ENDPOINTS: {
     AUTH: {
       LOGIN: '/api/auth/login',
