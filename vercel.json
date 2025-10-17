@@ -3,7 +3,7 @@
   "public": true,
   "installCommand": "npm run install:all",
   "builds": [
-    { "src": "client/next.config.ts", "use": "@vercel/next" },
+    { "src": "client", "use": "@vercel/next" },
     { "src": "api/index.js", "use": "@vercel/node" }
   ],
   "routes": [
