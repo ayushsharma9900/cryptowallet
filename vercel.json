@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "public": true,
   "installCommand": "npm run install:all",
   "builds": [
     { "src": "client/next.config.ts", "use": "@vercel/next" },
@@ -12,5 +13,8 @@
     { "src": "/api/transactions/(.*)", "dest": "/api/index.js" },
     { "src": "^/api/(.*)$", "dest": "/api/index.js" },
     { "src": "/(.*)", "dest": "/client/$1" }
-  ]
+  ],
+  "github": {
+    "enabled": false
+  }
 }
