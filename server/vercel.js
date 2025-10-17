@@ -2,6 +2,13 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
+const path = require('path');
+
+// Load environment variables based on environment
+const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env';
+require('dotenv').config({ path: path.resolve(process.cwd(), envFile) });
+
+// Fallback to .env if specific environment file doesn't exist
 require('dotenv').config();
 
 // Import database connection
@@ -52,20 +59,20 @@ app.use(cors({
       'https://cryptowallet-app.vercel.app', 
       'https://cryptowallet.vercel.app',
       'https://cryptowallet-git-main.vercel.app',
+      'https://cryptowallet-rho.vercel.app',
       'http://localhost:3000',
       'http://localhost:3001'
     ];
     
-    // Allow requests with no origin (mobile apps, etc.)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    if (allowedOrigins.includes(origin) || process.env.NODE_ENV === 'production') {
       callback(null, true);
     } else {
-      callback(null, true); // Allow all origins in production for now
+      callback(new Error(`Origin ${origin} not allowed by CORS`));
     }
   },
-  credentials: true
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 
 // Rate limiting - adjusted for serverless
