@@ -44,9 +44,14 @@ app.use(helmet({
 // CORS configuration for Vercel
 app.use(cors({
   origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
     const allowedOrigins = [
       process.env.CLIENT_URL || 'http://localhost:3000',
-      'https://cryptowallet-app.vercel.app', // Add your Vercel domain
+      'https://cryptowallet-app.vercel.app', 
+      'https://cryptowallet.vercel.app',
+      'https://cryptowallet-git-main.vercel.app',
       'http://localhost:3000',
       'http://localhost:3001'
     ];
