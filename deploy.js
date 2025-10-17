@@ -92,8 +92,7 @@ function buildApplication() {
 function deployToVercel() {
   console.log('🚀 Deploying to Vercel...');
   try {
-    // Run vercel command with auto-confirmation and without Git integration
-    execSync('vercel --confirm --prod', { stdio: 'inherit' });
+    execSync('vercel --prod', { stdio: 'inherit' });
     console.log('\n✅ Deployment completed successfully!');
     console.log('\n🌐 Your app should be live at the URL shown above');
     console.log('\n📋 Post-deployment checklist:');
@@ -104,8 +103,6 @@ function deployToVercel() {
     console.log('   - Monitor performance in Vercel dashboard');
   } catch (error) {
     console.error('❌ Deployment failed');
-    console.log('If you see a "gitSource missing repoId" error, try running:');
-    console.log('vercel --confirm --prod --cwd .');
     process.exit(1);
   }
 }
